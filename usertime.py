@@ -15,4 +15,9 @@ class UserTime:
             other.min_lunch_length == self.min_lunch_length
         )
 
+    def validate(self):
+        raise ValueError
+
+
+
 

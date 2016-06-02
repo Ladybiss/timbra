@@ -1,5 +1,6 @@
 from datetime import datetime as dt
 from datetime import timedelta as td
+from pytest import raises
 from ..usertime import UserTime
 from ..timbra import UserResult, calculate
 
@@ -86,4 +87,12 @@ def test_calculate_with_lunch_shorter_than_min_lunch():
     expected_user_result = UserResult(td(hours=4), td(minutes=25), td(hours=4), dt(2016, 6, 2, 17, 30))
     #this assert is working for __eq__ method in UserResult
     assert calculate(my_user_time) == expected_user_result
+
+
+def test_time_record_wrong_chronological_order():
+    my_user_time = UserTime(dt(2016, 6, 2, 13, 0), dt(2016, 6, 2, 9, 0), dt(2016, 6, 2, 13, 35), td(hours=8), td(minutes=30))
+    with raises(ValueError):
+        my_user_time.validate()
+
+
 
