@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 from datetime import timedelta as td
 from ..usertime import UserTime
-from ..timbra import UserResult
+from ..timbra import UserResult, calculate
 
 
 def test_create_correct_usertime_obj():
@@ -72,4 +72,18 @@ def test_inequality_for_userresult():
     myobj2 = UserResult(td(hours=4, minutes=1), lunch_break, afternoon_work, out_evening)
 
     assert myobj1 != myobj2
+
+
+def test_calculate_with_lunch_longer_than_min_lunch():
+    my_user_time = UserTime(dt(2016, 6, 2, 9, 0), dt(2016, 6, 2, 13, 0), dt(2016, 6, 2, 13, 35), td(hours=8), td(minutes=30))
+    expected_user_result = UserResult(td(hours=4), td(minutes=35), td(hours=4), dt(2016, 6, 2, 17, 35))
+    #this assert is working for __eq__ method in UserResult
+    assert calculate(my_user_time) == expected_user_result
+
+
+def test_calculate_with_lunch_shorter_than_min_lunch():
+    my_user_time = UserTime(dt(2016, 6, 2, 9, 0), dt(2016, 6, 2, 13, 0), dt(2016, 6, 2, 13, 25), td(hours=8), td(minutes=30))
+    expected_user_result = UserResult(td(hours=4), td(minutes=25), td(hours=4), dt(2016, 6, 2, 17, 30))
+    #this assert is working for __eq__ method in UserResult
+    assert calculate(my_user_time) == expected_user_result
 
