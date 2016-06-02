@@ -5,6 +5,14 @@ class UserResult:
         self.afternoon_work = afternoon_work
         self.out_evening = out_evening
 
+    def __eq__(self, other):
+        return (
+            other.morning_work == self.morning_work and
+            other.lunch_break == self.lunch_break and
+            other.afternoon_work == self.afternoon_work and
+            other.out_evening == self.out_evening
+        )
+
 
 def calculate(my_user_time):
     morning_work = my_user_time.out_lunch - my_user_time.in_morning
