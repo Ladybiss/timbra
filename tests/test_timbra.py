@@ -19,6 +19,11 @@ def test_create_correct_usertime_obj():
     assert myobj.min_lunch_length == min_lunch_length
 
 
+def test_invalid_usertimeobj_raises_exception():
+    with raises(ValueError):
+        UserTime(dt(2016, 6, 2, 9, 0), dt(2016, 6, 2, 13, 0), dt(2016, 6, 2, 13, 35), td(hours=13), td(minutes=30))
+
+
 def test_create_correct_userresult_obj():
     morning_work = td(hours=4)
     lunch_break = td(minutes=33)
@@ -90,9 +95,29 @@ def test_calculate_with_lunch_shorter_than_min_lunch():
 
 
 def test_time_record_wrong_chronological_order():
-    my_user_time = UserTime(dt(2016, 6, 2, 13, 0), dt(2016, 6, 2, 9, 0), dt(2016, 6, 2, 13, 35), td(hours=8), td(minutes=30))
-    with raises(ValueError):
-        my_user_time.validate()
+    my_user_time = UserTime(dt(2016, 6, 2, 9, 0), dt(2016, 6, 2, 13, 0), dt(2016, 6, 2, 13, 35), td(hours=8), td(minutes=30))
+    my_user_time.in_morning = dt(2016, 6, 2, 13, 0)
+    assert my_user_time.validate() is False
+
+
+def test_time_record_right_chronological_order():
+    my_user_time = UserTime(dt(2016, 6, 2, 9, 0), dt(2016, 6, 2, 13, 0), dt(2016, 6, 2, 13, 35), td(hours=8), td(minutes=30))
+    assert my_user_time.validate() is True
+
+
+def test_max_total_hours():
+    my_user_time = UserTime(dt(2016, 6, 2, 9, 0), dt(2016, 6, 2, 13, 0), dt(2016, 6, 2, 13, 35), td(hours=9), td(minutes=30))
+    my_user_time.total_hours = td(hours=13)
+    assert my_user_time.validate() is False
+
+
+def test_min_total_hours():
+    my_user_time = UserTime(dt(2016, 6, 2, 9, 0), dt(2016, 6, 2, 13, 0), dt(2016, 6, 2, 13, 35), td(hours=8), td(minutes=30))
+    my_user_time.total_hours = td(minutes=30)
+    assert my_user_time.validate() is False
+
+
+
 
 
 

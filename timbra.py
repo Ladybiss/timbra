@@ -25,8 +25,6 @@ def calculate(my_user_time):
         out_evening = min_out_evening + (my_user_time.min_lunch_length - lunch_break)
     return UserResult(morning_work, lunch_break, afternoon_work, out_evening)
 
-     #memo coerenza orari/durate
-
 
 
 

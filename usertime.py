@@ -1,3 +1,6 @@
+from datetime import timedelta as td
+
+
 class UserTime:
     def __init__(self, in_morning, out_lunch, in_lunch, total_hours, min_lunch_length):
         self.in_morning = in_morning
@@ -5,6 +8,9 @@ class UserTime:
         self.in_lunch = in_lunch
         self.total_hours = total_hours
         self.min_lunch_length = min_lunch_length
+        if not self.validate():
+            raise ValueError
+
 
     def __eq__(self, other):
         return (
@@ -16,7 +22,7 @@ class UserTime:
         )
 
     def validate(self):
-        raise ValueError
+        return (td(hours=1) <= self.total_hours <= td(hours=12)) and (self.in_morning < self.out_lunch < self.in_lunch)
 
 
 
